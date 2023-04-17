@@ -45,6 +45,37 @@ class ApiController extends AbstractFOSRestController
         return $this->view('Success', 201);
     }
     /**
+     * @Route("/exchange", methods={"GET","POST"}, name="app_history")
+     * @param ManagerRegistry $doctrine
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View
+     */
+    public function history(ManagerRegistry $doctrine, Request $request): \FOS\RestBundle\View\View
+    {
+        $sortOrders = ['asc', 'desc'];
+        $sortColumns = ['id', 'firstIn', 'secondIn', 'firstOut', 'secondOut', 'creation_date', 'update_date'];
+
+        // Get the query parameters for pagination and sorting
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int)$request->query->get('limit', 10);
+        $sortColumn = $request->query->get('sort', 'id');
+        $sortOrder = strtolower($request->query->get('order', 'asc'));
+
+        // Validate the query parameters
+        if (!in_array($sortColumn, $sortColumns) || !in_array($sortOrder, $sortOrders)) {
+            return $this->view('Bad Request', 400);
+        }
+
+        $repository = $doctrine->getRepository(History::class);
+        $historyItems = $repository->findBy([], [$sortColumn => $sortOrder], $limit, ($page - 1) * $limit);
+
+        if (!$historyItems) {
+            return $this->view('No items found', 404);
+        }
+        return $this->view($historyItems, 200);
+    }
+
+    /**
      * Update a History entity.
      * @param ManagerRegistry $doctrine
      * @param History $history

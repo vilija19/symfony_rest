@@ -25,8 +25,34 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/InputItem'
+  /exchange:
     get:
       summary: Get all items
+      parameters:
+        - in: query
+          name: page
+          description: Pagination Page
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Pagination Limit
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: Items Sort by
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: order
+          description: Items Sort Order
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: Success
@@ -37,6 +63,48 @@ paths:
                 items:
                   $ref: '#/components/schemas/HistoryItem'
         '400':
+          description: 'Bad Request'                  
+        '404':
+          description: 'No items found'
+    post:
+      summary: Get all items
+      parameters:
+        - in: query
+          name: page
+          description: Pagination Page
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Pagination Limit
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: Items Sort by
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: order
+          description: Items Sort Order
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoryItem'
+        '400':
+          description: 'Bad Request'                  
+        '404':
           description: 'No items found'
 components:
   schemas:
