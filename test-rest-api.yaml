@@ -1,0 +1,81 @@
+openapi: 3.0.0
+servers:
+- url: http://symfony_rest/
+  description: Local test server
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Simple Inventory API
+  contact:
+    email: dzan.service@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /exchange/values:
+    post:
+      summary: Exchange values
+      responses:
+        '201':
+          description: Success
+        '400':
+          description: 'Mandatory variables are absent'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InputItem'
+    get:
+      summary: Get all items
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoryItem'
+        '400':
+          description: 'No items found'
+components:
+  schemas:
+    HistoryItem:
+      type: object
+      required:
+        - id
+        - firstIn
+        - secondIn
+        - firstOut
+        - secondOut
+        - creation_date
+        - update_date
+      properties:
+        id:
+          type: integer
+        firstIn:
+          type: integer
+        secondIn:
+          type: integer
+        firstOut:
+          type: integer
+        secondOut:
+          type: integer
+        creation_date:
+          type: string
+          format: date-time
+        update_date:
+          type: string
+          format: date-time
+    InputItem:
+      type: object
+      required:
+        - first
+        - second
+      properties:
+        first:
+          type: integer
+          example: 5
+        second:
+          type: integer
+          example: 3
